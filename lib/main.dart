@@ -1,3 +1,5 @@
+// main.dart
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'screens/chat_screen.dart'; // Import the ChatScreen widget
