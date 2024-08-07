@@ -1,0 +1,38 @@
+name: flutter_application_3
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  flutter_launcher_icons: ^0.13.1
+  url_launcher: ^6.0.3
+  flutter_native_splash: ^2.0.0
+
+  flutter_firebase_chat_core: ^1.6.8  #chats
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter_native_splash:
+  color: "#42a5f5"  # Background color for the splash screen
+  image: "images/ip.png"  # Path to your new splash image
+  android: true  # Enable splash screen for Android
+  ios: true  # Enable splash screen for iOS
+  android_12:
+    icon_background_color: "#ffffff"  # Background color for the icon on Android 12
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/  # Add image files to the assets
