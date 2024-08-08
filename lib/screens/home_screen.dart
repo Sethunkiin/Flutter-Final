@@ -1,31 +1,36 @@
+// screens/home_screen.dart
 import 'package:flutter/material.dart';
-import '../widgets/chat_menu.dart';
+import 'google_map_screen.dart'; // ນຳເຂົ້າ GoogleMapScreen ທີ່ຈະເປັນໜ້າແຜນທີ່
+import '../widgets/chat_menu.dart'; // ນຳເຂົ້າ ChatMenu widget
+import 'home_page.dart'; // ນຳເຂົ້າ HomePage widget
+import 'settings_page.dart'; // ນຳເຂົ້າ SettingsPage widget
 
 class MyHome extends StatefulWidget {
-  const MyHome({super.key});
+  const MyHome({Key? key}) : super(key: key); // ໃຊ້ Key? ເພື່ອຄວາມປອດໄພຈາກ null
 
   @override
   State<MyHome> createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> {
-  int _selectedIndex = 0;
-  bool _isSearching = false; // สถานะว่ากำลังค้นหาอยู่หรือไม่
+  int _selectedIndex = 0; // ຕິດຕາມຄ່າດັດຊະນີຂອງລາຍການເມນູດ້ານລຸ່ມທີ່ເລືອກ
+  bool _isSearching = false; // ຕິດຕາມສະຖານະການມອງເຫັນຂອງແຖບຄົ້ນຫາ
   TextEditingController _searchController =
-      TextEditingController(); // ตัวควบคุม TextField สำหรับการค้นหา
+      TextEditingController(); // ຕົວຄວບຄຸມເພື່ອຈັດການຂໍ້ມູນຂອງການປ້ອນຄົ້ນຫາ
 
   @override
   void dispose() {
-    _searchController.dispose(); // ทำลายตัวควบคุมเมื่อ Widget ถูกลบ
+    _searchController.dispose(); // ທຳຄວາມສະອາດຕົວຄວບຄຸມເມື່ອ widget ຖືກລົບອອກ
     super.dispose();
   }
 
-  // ฟังก์ชันเพื่อสลับสถานะการค้นหา
+  // ຟັງຊັນເພື່ອສະຫຼັບບາຄົ້ນຫາ
   void _toggleSearch() {
     setState(() {
-      _isSearching = !_isSearching; // สลับสถานะการค้นหา
+      _isSearching = !_isSearching; // ສະຫຼັບຄວາມສາມາດເຫັນຂອງບາຄົ້ນຫາ
       if (!_isSearching) {
-        _searchController.clear(); // ล้างข้อความใน TextField
+        _searchController
+            .clear(); // ລ້າງຂໍ້ມູນໃນສະຫຼັບບາຄົ້ນຫາເມື່ອບໍ່ໄດ້ຄົ້ນຫາ
       }
     });
   }
@@ -36,17 +41,17 @@ class _MyHomeState extends State<MyHome> {
       appBar: AppBar(
         title: Row(
           children: [
-            Expanded(child: Text('🚨 PeePoremercall')), // ชื่อแอป
-            if (_selectedIndex == 1) // แสดงปุ่มค้นหาเมื่ออยู่ในหน้า ChatMenu
+            Expanded(
+              child: Text('🚨 PeePoremercall'),
+            ), // ຫົວຂໍ້ຂອງແອັບທີ່ມີ emoji
+            if (_selectedIndex == 1) // ສະແດງປຸ່ມຄົ້ນຫາສະເພາະໃນໜ້າ Emergency
               IconButton(
                 icon: Icon(_isSearching ? Icons.close : Icons.search),
-                onPressed: _toggleSearch,
+                onPressed: _toggleSearch, // ສະຫຼັບບາຄົ້ນຫາເມື່ອກົດປຸ່ມ
               ),
           ],
         ),
-        bottom: _isSearching &&
-                _selectedIndex ==
-                    1 // แสดง TextField เมื่อกำลังค้นหาและอยู่ในหน้า ChatMenu
+        bottom: _isSearching && _selectedIndex == 1
             ? PreferredSize(
                 preferredSize: Size.fromHeight(kToolbarHeight),
                 child: Padding(
@@ -54,7 +59,7 @@ class _MyHomeState extends State<MyHome> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search',
+                      hintText: 'ຄົ້ນຫາ', // ຂໍ້ຄວາມຂອງການຄົ້ນຫາ
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.search),
                     ),
@@ -64,54 +69,53 @@ class _MyHomeState extends State<MyHome> {
             : null,
       ),
       body: IndexedStack(
-        // ใช้ IndexedStack เพื่อเก็บสถานะของแต่ละหน้า
-        index: _selectedIndex,
+        index: _selectedIndex, // ສະແດງໜ້າທີ່ເລືອກ
         children: [
-          Center(child: Text('Home Page')),
+          HomePage(), // ໃຊ້ HomePage widget
           ChatMenu(
               searchController:
-                  _searchController), // ส่ง searchController เข้าไป
-          Center(child: Text('School Page')),
-          Center(child: Text('School Page 1')),
+                  _searchController), // ChatMenu ທີ່ມີຄວາມສາມາດຄົ້ນຫາ
+          GoogleMapScreen(), // ໜ້າຈໍ Google Map ທີ່ສະແດງແຜນທີ່ໃນຫົວຂໍ້ຂອງແອັບ
+          SettingsPage(), // ໃຊ້ SettingsPage widget ທີ່ນີ້
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.fixed, // ປະເພດແຖບນຳທາງດ້ານລຸ່ມທີ່ຖຶກກຳນົດ
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'ໜ້າຫຼັກ', // ສະແດງໜ້າຫຼັກ
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.emergency),
-            label: 'Emergency',
+            label: 'ສຸກເສີນ', // ສະແດງໜ້າ Emergency
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
+            icon: Icon(Icons.map),
+            label: 'ແຜນທີ່', // ໜ້າຈໍ Google Map ສຳລັບສະແດງແຜນທີ່
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: 'ການຕັ້ງຄ່າ', // ໜ້າການຕັ້ງຄ່າ
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
+        currentIndex: _selectedIndex, // ຂັບໃຫ້ເມນູທີ່ເລືອກໄດ້ແມ່ນເງົາ
+        selectedItemColor: Colors.blue, // ສີຂອງເມນູທີ່ເລືອກແລ້ວ
+        unselectedItemColor: Colors.grey, // ສີຂອງເມນູທີ່ບໍ່ໄດ້ເລືອກ
+        backgroundColor: Colors.white, // ສີພື້ນຫລັງ
         onTap: (index) {
           setState(() {
-            _selectedIndex = index;
+            _selectedIndex = index; // ອັບເດດຄ່າດັດຊະນີທີ່ເລືອກ
             if (_selectedIndex != 1) {
-              _isSearching = false; // ปิดการค้นหาเมื่อไม่อยู่ในหน้า ChatMenu
+              _isSearching = false; // ປິດບາຄົ້ນຫາເມື່ອບໍ່ໃຊ້ໜ້າ Emergency
             }
           });
         },
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedFontSize: 11.0,
-        unselectedFontSize: 11.0,
-        iconSize: 24.0,
+        showSelectedLabels: true, // ສະແດງສັນຍາລັກສໍາລັບເມນູທີ່ເລືອກແລ້ວ
+        showUnselectedLabels: true, // ສະແດງສັນຍາລັກສໍາລັບເມນູທີ່ບໍ່ໄດ້ເລືອກ
+        selectedFontSize: 11.0, // ຂະໜາດອັກສອນຂອງສັນຍາລັກທີ່ເລືອກແລ້ວ
+        unselectedFontSize: 11.0, // ຂະໜາດອັກສອນຂອງສັນຍາລັກທີ່ບໍ່ໄດ້ເລືອກ
+        iconSize: 24.0, // ຂະໜາດຂອງສັນຍາລັກ
       ),
     );
   }
